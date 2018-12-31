@@ -32,16 +32,22 @@ export class AppComponent implements OnInit {
         });
     }
 
-    // convenience getter for easy access to form fields, if not used then in html we can use like 
+    // convenience getter for easy access to form fields, if not used then in html we can use like
     // form.get('identity').touched"
     get f() { return this.registerForm.controls; }
 
 
-  onAddHobby(){
+    onAddHobby(){
+      const control=new FormControl(null,Validators.required);
+      (<FormArray>this.registerForm.get('hobbies')).push(control);
+    }
 
-    const control=new FormControl(null,Validators.required);
-    (<FormArray>this.registerForm.get('hobbies')).push(control);
-  }
+
+    remDetails(index: number, type: string){
+        const control = <FormArray>this.registerForm.controls[type];
+      // remove the chosen row
+      control.removeAt(index);
+    }
 
     onSubmit() {
         this.submitted = true;
@@ -49,7 +55,7 @@ export class AppComponent implements OnInit {
         if (this.registerForm.invalid) {
             return;
         }
-        
+
         this.myRegForm.resetForm();
         this.submitted = false;
         this.toastr.success("Registration Successfull");
